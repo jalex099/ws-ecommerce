@@ -1,5 +1,6 @@
 package com.javidev.ecommerce.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,8 +35,9 @@ public class Product {
     @Getter
     private Boolean isActive;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Setter
     @Getter
     private Category category;

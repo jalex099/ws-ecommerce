@@ -9,8 +9,6 @@ import java.util.ArrayList;
 
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
-    // Name to lower case
-
     @Query("FROM Product p WHERE (:name IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
             "AND (:category IS NULL OR p.category.id = :category) " +
             "AND (:isActive IS NULL OR p.isActive = :isActive)")

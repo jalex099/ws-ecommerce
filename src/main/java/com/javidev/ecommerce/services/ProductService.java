@@ -16,5 +16,12 @@ public class ProductService {
         return productRepository.findByFilters(name, category, isActive);
     }
 
+    public Product getProduct(Long id) {
+        return productRepository.findById(id).orElse(null);
+    }
+
+    public Product saveProduct(Product product) {
+        return productRepository.save(product);
+    }
 
 }
