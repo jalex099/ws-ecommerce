@@ -1,0 +1,72 @@
+package com.javidev.ecommerce.entities;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.javidev.ecommerce.config.Params;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.Where;
+
+@Entity
+@Table(name = "images")
+@Where(clause = "company_id = " + Params.COMPANY_ID)
+public class Image {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true)
+    @Getter
+    @Setter
+    private Long id;
+
+    @Column(name = "type", nullable = false)
+    @Getter
+    @Setter
+    private String type;
+
+    @Column(name = "extension", nullable = false)
+    @Getter
+    @Setter
+    private String extension;
+
+    @Column(name = "size")
+    @Getter
+    @Setter
+    private String size;
+
+    @Column(name = "reference", nullable = false)
+    @Getter
+    @Setter
+    private Long reference;
+
+    @Column(name = "url", nullable = false)
+    @Getter
+    @Setter
+    private String url;
+
+    @Column(name = "key", nullable = false)
+    @Getter
+    @Setter
+    private String key;
+
+    @Column(name = "weight")
+    @Getter
+    @Setter
+    private Double weight;
+
+    @Column(name = "height")
+    @Getter
+    @Setter
+    private Long height;
+
+    @Column(name = "width")
+    @Getter
+    @Setter
+    private Long width;
+
+    @Column(name = "company_id")
+    @Getter
+    @Setter
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long companyId ;
+
+}

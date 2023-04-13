@@ -1,8 +1,12 @@
 package com.javidev.ecommerce.controllers;
 
 import com.javidev.ecommerce.entities.Category;
+import com.javidev.ecommerce.entities.Company;
+import com.javidev.ecommerce.entities.Image;
 import com.javidev.ecommerce.entities.Product;
 import com.javidev.ecommerce.services.CategoryService;
+import com.javidev.ecommerce.services.CompanyService;
+import com.javidev.ecommerce.services.ImageService;
 import com.javidev.ecommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +24,12 @@ public class MainController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private ImageService imageService;
+
+    @Autowired
+    private CompanyService companyService;
+
 
     @GetMapping("/getData")
     public HashMap<String, Object> getData() {
@@ -27,10 +37,15 @@ public class MainController {
         ArrayList<Category> categories = categoryService.getCategories(null, true);
         // GET THE PRODUCTS
         ArrayList<Product> products = productService.getProducts(null, null, true);
-        System.out.println(categories);
+        // GET THE COMPANY INFORMATION
+        Company company = companyService.getCompany();
+        // GET THE IMAGES
+        ArrayList<Image> images = imageService.getImages(null, null);
         HashMap<String, Object> data = new HashMap<>();
         data.put("categories", categories);
         data.put("products", products);
+        data.put("images", images);
+        data.put("company", company);
         return data;
     }
 }

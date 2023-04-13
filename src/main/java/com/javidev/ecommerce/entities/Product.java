@@ -1,12 +1,15 @@
 package com.javidev.ecommerce.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.javidev.ecommerce.config.Params;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "products")
+@Where(clause = "company_id = " + Params.COMPANY_ID)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
