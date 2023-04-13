@@ -29,25 +29,6 @@ CREATE TABLE IF NOT EXISTS products (
     FOREIGN KEY (company_id) REFERENCES companies(id)
 );
 
--- CREAR TABLA DE TAGS
-CREATE TABLE IF NOT EXISTS tags (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(20) NOT NULL,
-    company_id INTEGER NOT NULL,
-    FOREIGN KEY (company_id) REFERENCES companies(id)
-);
-
--- CREAR TABLA DE PRODUCTOS_TAGS
-CREATE TABLE IF NOT EXISTS products_tags (
-    id SERIAL PRIMARY KEY,
-    product_id INTEGER NOT NULL,
-    tag_id INTEGER NOT NULL,
-    company_id INTEGER NOT NULL,
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    FOREIGN KEY (tag_id) REFERENCES tags(id),
-    FOREIGN KEY (company_id) REFERENCES companies(id)
-);
-
 
 -- CREAR TABLA DE IMAGENES
 CREATE TABLE IF NOT EXISTS images (
@@ -76,3 +57,35 @@ CREATE TABLE IF NOT EXISTS params (
 );
 
 ---------------------------------------------------------------------------
+
+-- CREAR TABLA DE USUARIOS (permitir login con google y facebook)
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255),
+    platform VARCHAR(255),
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    company_id INTEGER NOT NULL,
+    FOREIGN KEY (company_id) REFERENCES companies(id)
+);
+
+-- CREAR TABLA CARRITO
+CREATE TABLE IF NOT EXISTS carts (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(3) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- CREAR TABLA CARRITO DETALES
+CREATE TABLE IF NOT EXISTS carts_details (
+    id SERIAL PRIMARY KEY,
+    cart_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    quantity INTEGER NOT NULL,
+    FOREIGN KEY (cart_id) REFERENCES cart(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);

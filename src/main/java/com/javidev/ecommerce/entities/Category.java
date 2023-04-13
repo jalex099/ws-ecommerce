@@ -30,8 +30,14 @@ public class Category {
     @Getter
     @Setter
     @Column(name = "is_active")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Boolean isActive;
+
+    @Column(name = "company_id", nullable = false)
+    @Getter
+    @Setter
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long companyId;
 
 
 //    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)

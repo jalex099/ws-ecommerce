@@ -1,5 +1,6 @@
 package com.javidev.ecommerce.controllers;
 
+import com.javidev.ecommerce.entities.Category;
 import com.javidev.ecommerce.entities.Product;
 import com.javidev.ecommerce.services.ProductService;
 import com.javidev.ecommerce.services.S3Service;
@@ -52,16 +53,19 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> saveProduct(@RequestParam("image") MultipartFile image) {
+    public ResponseEntity<?> saveProduct(@RequestBody HashMap<String, Object> data) {
         try {
-            String imageName = image.getOriginalFilename();
-            String imagePath = UPLOAD_URI + imageName;
-            image.transferTo(Path.of(imagePath));
-            HashMap<String, Object> imageData = s3Service.putObject(image);
-            return new ResponseEntity<>(imageData, HttpStatus.CREATED);
+            productService.saveProduct(
+                    data.get("name").toString(),
+                    data.get("description").toString(),
+                    Double.parseDouble(data.get("price").toString()),
+                    Long.parseLong(data.get("category_id").toString())
+            );
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(new HashMap<String, String>() {{
                 put("error", "Product not saved");
+                put("message", e.getMessage());
             }}, HttpStatus.BAD_REQUEST);
         }
     }

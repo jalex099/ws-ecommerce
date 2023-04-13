@@ -38,11 +38,10 @@ public class Product {
     @Getter
     private Boolean isActive;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "category_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(name = "category_id", nullable = false)
     @Setter
     @Getter
-    private Category category;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long categoryId;
 
 }

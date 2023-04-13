@@ -1,7 +1,9 @@
 package com.javidev.ecommerce.services;
 
+import com.javidev.ecommerce.config.Params;
 import com.javidev.ecommerce.entities.Category;
 import com.javidev.ecommerce.repositories.CategoryRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +19,9 @@ public class CategoryService {
             Boolean isActive
     ) {
         return categoryRepository.findByFilters(name, isActive);
+    }
+
+    public void createCategory(String name , String description) {
+        categoryRepository.save(name, description, Long.parseLong(Params.COMPANY_ID));
     }
 }
