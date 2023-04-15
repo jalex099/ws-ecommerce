@@ -16,6 +16,7 @@ public class Image {
     @Column(name = "id", nullable = false, unique = true)
     @Getter
     @Setter
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long id;
 
     @Column(name = "type", nullable = false)
@@ -31,6 +32,7 @@ public class Image {
     @Column(name = "size")
     @Getter
     @Setter
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String size;
 
     @Column(name = "reference", nullable = false)
@@ -46,21 +48,25 @@ public class Image {
     @Column(name = "key", nullable = false)
     @Getter
     @Setter
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String key;
 
     @Column(name = "weight")
     @Getter
     @Setter
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Double weight;
 
     @Column(name = "height")
     @Getter
     @Setter
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long height;
 
     @Column(name = "width")
     @Getter
     @Setter
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long width;
 
     @Column(name = "company_id")

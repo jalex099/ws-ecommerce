@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public interface ImageRepository extends CrudRepository<Image, Long> {
 

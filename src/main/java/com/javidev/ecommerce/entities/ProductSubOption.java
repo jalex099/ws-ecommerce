@@ -7,55 +7,52 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
-@Table(name = "products")
+@Table(name = "products_sub_options")
 @Where(clause = "company_id = " + Params.COMPANY_ID + " AND is_active = true")
-public class Product {
+public class ProductSubOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, unique = true)
-    @Setter
+    @Column(name = "id")
     @Getter
+    @Setter
     private Long id;
 
     @Column(name = "name", nullable = false)
-    @Setter
     @Getter
+    @Setter
     private String name;
 
     @Column(name = "description")
-    @Setter
     @Getter
+    @Setter
     private String description;
 
-    @Column(name = "price", nullable = false)
-    @Setter
+    @Column(name = "aditional_price", nullable = false)
     @Getter
-    private Double price;
+    @Setter
+    private Double aditionalPrice;
 
     @Column(name = "order")
-    @Setter
     @Getter
+    @Setter
     private Integer order;
 
     @Column(name = "is_active")
-    @Setter
     @Getter
+    @Setter
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Boolean isActive;
 
-    @Column(name = "category_id", nullable = false)
-    @Setter
+    @Column(name = "product_option_id", nullable = false)
     @Getter
+    @Setter
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Long categoryId;
+    private Long productOptionId;
 
-    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL)
-    @OrderBy("order ASC")
+    @Column(name = "company_id", nullable = false)
     @Getter
     @Setter
-    private Set<ProductOption> options = new HashSet<>();
-
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long companyId;
 }

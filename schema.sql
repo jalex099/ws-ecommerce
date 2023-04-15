@@ -22,10 +22,39 @@ CREATE TABLE IF NOT EXISTS products (
     name VARCHAR(255) NOT NULL,
     description TEXT,
     price DECIMAL(10,2) NOT NULL,
+    "order" INTEGER DEFAULT -1,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     category_id INTEGER NOT NULL,
     company_id INTEGER NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id),
+    FOREIGN KEY (company_id) REFERENCES companies(id)
+);
+
+-- CREAR TABLA OPCIONES DE PRODUCTO
+CREATE TABLE IF NOT EXISTS products_options (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    aditional_price DECIMAL(10,2) NOT NULL,
+    "order" INTEGER DEFAULT -1,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    product_id INTEGER NOT NULL,
+    company_id INTEGER NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (company_id) REFERENCES companies(id)
+);
+
+-- CREAR TABLA SUB OPCIONES DE PRODUCTO
+CREATE TABLE IF NOT EXISTS product_sub_options (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    aditional_price DECIMAL(10,2) NOT NULL,
+    "order" INTEGER DEFAULT -1,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    product_option_id INTEGER NOT NULL,
+    company_id INTEGER NOT NULL,
+    FOREIGN KEY (product_option_id) REFERENCES products_options(id),
     FOREIGN KEY (company_id) REFERENCES companies(id)
 );
 
@@ -35,7 +64,7 @@ CREATE TABLE IF NOT EXISTS images (
     id SERIAL PRIMARY KEY,
     type VARCHAR(3) NOT NULL,
     extension VARCHAR(8) NOT NULL,
-    size VARCHAR(2),
+    size VARCHAR(24),
     reference INTEGER NOT NULL,
     url VARCHAR(255) NOT NULL,
     key VARCHAR(120) NOT NULL,
@@ -74,10 +103,8 @@ CREATE TABLE IF NOT EXISTS users (
 -- CREAR TABLA CARRITO
 CREATE TABLE IF NOT EXISTS carts (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(3) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    status VARCHAR(3) NOT NULL
 );
 
 -- CREAR TABLA CARRITO DETALES

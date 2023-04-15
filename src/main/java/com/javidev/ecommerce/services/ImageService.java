@@ -18,7 +18,6 @@ public class ImageService {
     ) {
         return imageRepository.findByTypeAndReference(type, reference);
     }
-
     public Image saveImage(Image image) {
         return imageRepository.save(image);
     }
