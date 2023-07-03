@@ -12,6 +12,8 @@ import org.hibernate.annotations.Where;
 @Where(clause = "company_id = " + Params.COMPANY_ID)
 public class Image {
 
+    public Image() {
+    }
     public Image(
             String type,
             String extension,
