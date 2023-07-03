@@ -19,7 +19,8 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
 
 
     @Modifying
-    @Query(value = "INSERT INTO products (name, description, price, category_id, company_id) VALUES (:name, :description, :price, :categoryId, :companyId) ", nativeQuery = true)
+    @Query(value = "INSERT INTO products (name, description, \"order\", price, category_id, company_id) " +
+            "VALUES (:name, :description, (SELECT MAX(p.order) + 1 FROM products p), :price, :categoryId, :companyId) ", nativeQuery = true)
     @Transactional
     void save(String name, String description, Double price, Long categoryId, Long companyId);
 }

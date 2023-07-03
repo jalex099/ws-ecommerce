@@ -39,22 +39,23 @@ public class ImageService {
         return imageRepository.findByTypeAndReference(type, reference);
     }
 
-    public HashMap<String, Object> uploadImage(MultipartFile image) throws IOException {
+    public HashMap<String, Object> uploadImage(MultipartFile image, String size) throws IOException {
         MomeCloud momeCloud = new MomeCloud();
         byte[] imageBytes = Base64.getEncoder().encode(image.getBytes());
         String base64Image = new String(imageBytes);
-//        String extension = StringUtils.getFilenameExtension(image.getOriginalFilename());
         String key = String.format("%s_%s", UUID.randomUUID(), Params.COMPANY_ID);
         momeCloud.setFileBase64(base64Image);
         momeCloud.setFilename(key);
         momeCloud.setOriginalFilename(image.getOriginalFilename());
-        momeCloud.setSize("large");
+        momeCloud.setSize(size);
         RestTemplate restTemplate = new RestTemplate();
         try{
             ResponseEntity<HashMap> response = restTemplate.postForEntity(cloudApiUrlImages, momeCloud, HashMap.class);
             HashMap<String, Object> imageData = new HashMap<>();
             imageData.put("key", response.getBody().get("key"));
             imageData.put("url", response.getBody().get("url"));
+            imageData.put("width", response.getBody().get("width"));
+            imageData.put("height", response.getBody().get("height"));
             return imageData;
         } catch (Exception e) {
             e.printStackTrace();

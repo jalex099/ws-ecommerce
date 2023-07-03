@@ -51,12 +51,6 @@ public class Image {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String key;
 
-    @Column(name = "weight")
-    @Getter
-    @Setter
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Double weight;
-
     @Column(name = "height")
     @Getter
     @Setter
