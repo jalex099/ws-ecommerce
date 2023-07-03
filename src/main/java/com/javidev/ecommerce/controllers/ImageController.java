@@ -44,16 +44,17 @@ public class ImageController {
     ) {
         try {
             HashMap<String, Object> savedImage = imageService.uploadImage(image, size);
-            Image imageEntity = new Image();
-            imageEntity.setType(type);
-            imageEntity.setSize(size);
-            imageEntity.setReference(reference);
-            imageEntity.setWidth(Long.parseLong(String.valueOf(savedImage.get("width"))));
-            imageEntity.setHeight(Long.parseLong(String.valueOf(savedImage.get("height"))));
-            imageEntity.setCompanyId(Long.parseLong(Params.COMPANY_ID));
-            imageEntity.setUrl((String) savedImage.get("url"));
-            imageEntity.setKey((String) savedImage.get("key"));
-            imageEntity.setExtension(StringUtils.getFilenameExtension(image.getOriginalFilename()));
+            Image imageEntity = new Image(
+                    type,
+                    StringUtils.getFilenameExtension(image.getOriginalFilename()),
+                    size,
+                    reference,
+                    (String) savedImage.get("url"),
+                    (String) savedImage.get("key"),
+                    Long.parseLong(String.valueOf(savedImage.get("height"))),
+                    Long.parseLong(String.valueOf(savedImage.get("width"))),
+                    Long.parseLong(Params.COMPANY_ID)
+            );
             Image createdImage = imageService.saveImage(imageEntity);
             return new ResponseEntity<>(createdImage, HttpStatus.CREATED);
         } catch (Exception e) {

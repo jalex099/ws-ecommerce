@@ -11,6 +11,29 @@ import org.hibernate.annotations.Where;
 @Table(name = "images")
 @Where(clause = "company_id = " + Params.COMPANY_ID)
 public class Image {
+
+    public Image(
+            String type,
+            String extension,
+            String size,
+            Long reference,
+            String url,
+            String key,
+            Long height,
+            Long width,
+            Long companyId
+    ) {
+        this.type = type;
+        this.extension = extension;
+        this.size = size;
+        this.reference = reference;
+        this.url = url;
+        this.key = key;
+        this.height = height;
+        this.width = width;
+        this.companyId = companyId;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
