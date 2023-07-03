@@ -43,21 +43,23 @@ public class ImageController {
     ) {
         try {
             BufferedImage bImg = ImageIO.read(image.getInputStream());
-            HashMap<String, Object> imageData = s3Service.putObject(image);
-            Image imageEntity = new Image();
-            imageEntity.setType(type);
-            imageEntity.setSize(size);
-            imageEntity.setWidth(Long.parseLong(String.valueOf(bImg.getWidth())));
-            imageEntity.setHeight(Long.parseLong(String.valueOf(bImg.getHeight())));
-            imageEntity.setWeight(Double.parseDouble(String.valueOf(image.getSize()/1024)));
-            imageEntity.setReference(reference);
-            imageEntity.setCompanyId(Long.parseLong(Params.COMPANY_ID));
-            imageEntity.setUrl((String) imageData.get("url"));
-            imageEntity.setKey((String) imageData.get("key"));
-            imageEntity.setExtension(image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf(".") + 1));
-
-            Image createdImage = imageService.saveImage(imageEntity);
-            return new ResponseEntity<>(createdImage, HttpStatus.CREATED);
+            HashMap<String, Object> imageData = imageService.uploadImage(image);
+//            HashMap<String, Object> imageData = s3Service.putObject(image);
+//            Image imageEntity = new Image();
+//            imageEntity.setType(type);
+//            imageEntity.setSize(size);
+//            imageEntity.setWidth(Long.parseLong(String.valueOf(bImg.getWidth())));
+//            imageEntity.setHeight(Long.parseLong(String.valueOf(bImg.getHeight())));
+//            imageEntity.setWeight(Double.parseDouble(String.valueOf(image.getSize()/1024)));
+//            imageEntity.setReference(reference);
+//            imageEntity.setCompanyId(Long.parseLong(Params.COMPANY_ID));
+//            imageEntity.setUrl((String) imageData.get("url"));
+//            imageEntity.setKey((String) imageData.get("key"));
+//            imageEntity.setExtension(image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf(".") + 1));
+//
+//            Image createdImage = imageService.saveImage(imageEntity);
+//            return new ResponseEntity<>(createdImage, HttpStatus.CREATED);
+            return new ResponseEntity<>(imageData, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(new HashMap<String, String>() {{
                 put("error", "Image not saved");
