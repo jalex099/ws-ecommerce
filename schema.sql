@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS products_options (
 );
 
 -- CREAR TABLA SUB OPCIONES DE PRODUCTO
-CREATE TABLE IF NOT EXISTS product_sub_options (
+CREATE TABLE IF NOT EXISTS products_sub_options (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS images (
 CREATE TABLE IF NOT EXISTS params (
     id SERIAL PRIMARY KEY,
     key VARCHAR(30) NOT NULL,
+	parent_key VARCHAR(30),
     value VARCHAR(255) NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     company_id INTEGER NOT NULL,
@@ -113,6 +114,6 @@ CREATE TABLE IF NOT EXISTS carts_details (
     cart_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
-    FOREIGN KEY (cart_id) REFERENCES cart(id),
+    FOREIGN KEY (cart_id) REFERENCES carts(id),
     FOREIGN KEY (product_id) REFERENCES products(id)
 );

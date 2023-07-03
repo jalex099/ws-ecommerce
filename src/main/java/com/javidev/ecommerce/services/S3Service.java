@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.javidev.ecommerce.config.Params;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -17,14 +18,14 @@ import java.util.UUID;
 @Service
 public class S3Service {
 
-    private final static String BUCKET_NAME = "ecommerce.testing";
+    private final static String BUCKET_NAME = "mome.cloud";
 
     @Autowired
     private AmazonS3 s3Client;
 
     public HashMap<String, Object> putObject(MultipartFile file){
         String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
-        String key = String.format("%s.%s", UUID.randomUUID(), extension);
+        String key = String.format("%s_%s.%s", UUID.randomUUID(), Params.COMPANY_ID, extension);
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
         try{
