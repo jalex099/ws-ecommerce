@@ -33,10 +33,10 @@ public class ProductSubOption {
     @Setter
     private Double aditionalPrice;
 
-    @Column(name = "order")
+    @Column(name = "order_pos")
     @Getter
     @Setter
-    private Integer order;
+    private Integer orderPos;
 
     @Column(name = "is_active")
     @Getter

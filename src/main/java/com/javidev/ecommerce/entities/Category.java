@@ -30,7 +30,7 @@ public class Category {
     @Getter
     @Setter
     @Column(name = "is_active")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Boolean isActive;
 
     @Column(name = "company_id", nullable = false)

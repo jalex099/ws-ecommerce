@@ -12,7 +12,8 @@ import java.util.ArrayList;
 @Repository
 public interface CategoryRepository extends CrudRepository<Category, Long> {
     @Query("FROM Category c WHERE (:name IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
-            "AND (:isActive IS NULL OR c.isActive = :isActive)")
+            "AND (:isActive IS NULL OR c.isActive = :isActive)" +
+            "ORDER BY c.id ASC")
     ArrayList<Category> findByFilters(String name, Boolean isActive);
 
 

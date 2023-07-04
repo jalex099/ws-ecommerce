@@ -36,10 +36,10 @@ public class Product {
     @Getter
     private Double price;
 
-    @Column(name = "order")
+    @Column(name = "order_pos")
     @Setter
     @Getter
-    private Integer order;
+    private Integer orderPos;
 
     @Column(name = "is_active")
     @Setter
@@ -53,7 +53,7 @@ public class Product {
     private Long categoryId;
 
     @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL)
-    @OrderBy("order ASC")
+    @OrderBy("order_pos ASC")
     @Getter
     @Setter
     private Set<ProductOption> options = new HashSet<>();

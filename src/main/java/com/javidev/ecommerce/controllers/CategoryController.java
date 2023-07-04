@@ -34,4 +34,24 @@ public class CategoryController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PutMapping
+    public ResponseEntity<?> updateCategory(@RequestBody Category category) {
+        try{
+            Category updatedCategory = categoryService.updateCategory(category);
+            return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable("id") Long id) {
+        try{
+            Category category = categoryService.deleteCategory(id);
+            return new ResponseEntity<>(category, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
