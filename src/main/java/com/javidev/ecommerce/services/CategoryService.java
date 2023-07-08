@@ -29,16 +29,16 @@ public class CategoryService {
 
     public Category updateCategory(Category category) {
         Category oldCategory = categoryRepository.findById(category.getId()).orElse(null);
+        if (oldCategory == null) return null;
         Category mergedCategory = Objects.merge(category, oldCategory);
         return categoryRepository.save(mergedCategory);
     }
 
     public Category deleteCategory(Long id) {
         Category category = categoryRepository.findById(id).orElse(null);
-        if (category != null) {
-            category.setIsActive(false);
-            categoryRepository.save(category);
-        }
+        if (category == null) return null;
+        category.setIsActive(false);
+        categoryRepository.save(category);
         return category;
     }
 }

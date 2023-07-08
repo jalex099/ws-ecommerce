@@ -1,12 +1,21 @@
 package com.javidev.ecommerce.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.javidev.ecommerce.config.Params;
+import com.zaxxer.hikari.util.SuspendResumeLock;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
+import org.springframework.core.annotation.Order;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "carts")
@@ -19,11 +28,10 @@ public class Cart {
     @Setter
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
+    @Column(name = "code", nullable = false)
     @Getter
     @Setter
-    private User user;
+    private String code;
 
     @Column(name = "date", nullable = false)
     @Getter
@@ -34,4 +42,37 @@ public class Cart {
     @Getter
     @Setter
     private String status;
+
+    @Column(name = "visibility", nullable = false)
+    @Getter
+    @Setter
+    private String visibility = "PUBLIC";
+
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+//    @Getter
+//    @Setter
+    private User userId;
+
+    @Column(name = "company_id", nullable = false)
+    @Getter
+    @Setter
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long companyId;
+
+    @OneToMany(mappedBy = "cartId", cascade = CascadeType.ALL)
+    @OrderBy("order ASC")
+    @Getter
+    private List<CartDetail> products;
+
+    public void addProduct(CartDetail product) {
+        products.add(product);
+        product.setCartId(this);
+    }
+
+    public void clearProducts() {
+        products = new ArrayList<>();
+    }
+
 }

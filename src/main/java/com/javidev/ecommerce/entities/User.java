@@ -7,6 +7,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 @Where(clause = "company_id = " + Params.COMPANY_ID + " AND is_active = true")
@@ -48,4 +53,8 @@ public class User {
     @Setter
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Boolean isActive;
+
+
+    @OneToMany(mappedBy = "userId")
+    private List<Cart> carts;
 }

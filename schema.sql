@@ -101,11 +101,20 @@ CREATE TABLE IF NOT EXISTS users (
     FOREIGN KEY (company_id) REFERENCES companies(id)
 );
 
+-- CREAR ENUM DE VISIBILIDAD DE CARRITO
+CREATE TYPE visibility AS ENUM ('PUBLIC', 'PRIVATE');
+
 -- CREAR TABLA CARRITO
 CREATE TABLE IF NOT EXISTS carts (
     id SERIAL PRIMARY KEY,
+    code VARCHAR(255) NOT NULL,
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(3) NOT NULL
+    status VARCHAR(3) NOT NULL,
+    visibility visibility NOT NULL DEFAULT 'PRIVATE',
+    user_id INTEGER,
+    company_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (company_id) REFERENCES companies(id)
 );
 
 -- CREAR TABLA CARRITO DETALES
@@ -114,6 +123,18 @@ CREATE TABLE IF NOT EXISTS carts_details (
     cart_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
+    order_pos INTEGER,
     FOREIGN KEY (cart_id) REFERENCES carts(id),
     FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+-- CREAR TABLA DE CARRITO DETALLES OPCIONES
+CREATE TABLE IF NOT EXISTS carts_details_options (
+    id SERIAL PRIMARY KEY,
+    cart_detail_id INTEGER NOT NULL,
+    product_option_id INTEGER NOT NULL,
+    product_sub_option_id INTEGER NOT NULL,
+    FOREIGN KEY (cart_detail_id) REFERENCES carts_details(id),
+    FOREIGN KEY (product_option_id) REFERENCES products_options(id),
+    FOREIGN KEY (product_sub_option_id) REFERENCES products_sub_options(id)
 );

@@ -14,6 +14,11 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping
+    public ResponseEntity<?> getUsers() {
+        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+    }
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody HashMap<String, Object> data) {
         try{

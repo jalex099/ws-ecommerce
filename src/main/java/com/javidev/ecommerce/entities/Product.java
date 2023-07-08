@@ -1,5 +1,6 @@
 package com.javidev.ecommerce.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.javidev.ecommerce.config.Params;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -56,6 +58,7 @@ public class Product {
     @OrderBy("order_pos ASC")
     @Getter
     @Setter
-    private Set<ProductOption> options = new HashSet<>();
+    private List<ProductOption> options;
+
 
 }
