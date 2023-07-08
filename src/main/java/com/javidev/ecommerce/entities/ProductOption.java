@@ -31,11 +31,6 @@ public class ProductOption {
     @Setter
     private String description;
 
-    @Column(name = "aditional_price", nullable = false)
-    @Getter
-    @Setter
-    private Double aditionalPrice;
-
     @Column(name = "order_pos")
     @Getter
     @Setter

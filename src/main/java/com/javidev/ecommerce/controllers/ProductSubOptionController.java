@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("/api/suboptions")
+@RequestMapping("/api/product-suboptions")
 public class ProductSubOptionController {
     @Autowired
     private ProductSubOptionService productSubOptionService;
@@ -21,8 +21,7 @@ public class ProductSubOptionController {
     public ResponseEntity<?> saveSubOption(@RequestBody HashMap<String, Object> data) {
         try {
             productSubOptionService.saveOption(
-                    data.get("name").toString(),
-                    data.get("description").toString(),
+                    Long.parseLong(data.get("optionId").toString()),
                     Double.parseDouble(data.get("aditionalPrice").toString()),
                     Long.parseLong(data.get("productOptionId").toString())
             );

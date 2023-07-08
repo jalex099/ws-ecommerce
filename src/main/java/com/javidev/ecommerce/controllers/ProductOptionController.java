@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("/api/options")
+@RequestMapping("/api/product-options")
 public class ProductOptionController {
 
     @Autowired
@@ -24,7 +24,6 @@ public class ProductOptionController {
             productOptionService.saveOption(
                     data.get("name").toString(),
                     data.get("description").toString(),
-                    Double.parseDouble(data.get("aditionalPrice").toString()),
                     Long.parseLong(data.get("productId").toString())
             );
             return new ResponseEntity<>(HttpStatus.CREATED);

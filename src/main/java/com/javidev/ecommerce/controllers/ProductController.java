@@ -35,9 +35,7 @@ public class ProductController {
         try {
             return new ResponseEntity<>(productService.getProducts(name, category, isActive), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new HashMap<String, String>() {{
-                put("error", "Products not found");
-            }}, HttpStatus.NOT_FOUND);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -46,9 +44,7 @@ public class ProductController {
         try {
             return new ResponseEntity<>(productService.getProduct(id), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new HashMap<String, String>() {{
-                put("error", "Product not found");
-            }}, HttpStatus.NOT_FOUND);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -63,10 +59,7 @@ public class ProductController {
             );
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(new HashMap<String, String>() {{
-                put("error", "Product not saved");
-                put("message", e.getMessage());
-            }}, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -76,10 +69,7 @@ public class ProductController {
             Product updated =  productService.updateProduct(product);
             return new ResponseEntity<>(updated,HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new HashMap<String, String>() {{
-                put("error", "Product not updated");
-                put("message", e.getMessage());
-            }}, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -89,10 +79,7 @@ public class ProductController {
             Product deleted = productService.deleteProduct(id);
             return new ResponseEntity<>(deleted, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(new HashMap<String, String>() {{
-                put("error", "Product not deleted");
-                put("message", e.getMessage());
-            }}, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

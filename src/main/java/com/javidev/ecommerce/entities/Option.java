@@ -7,42 +7,43 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
+import java.util.List;
+
 @Entity
-@Table(name = "products_sub_options")
-@Where(clause = "company_id = " + Params.COMPANY_ID)
-public class ProductSubOption {
+@Table(name = "options")
+@Where(clause = "company_id = " + Params.COMPANY_ID + " AND is_active = true")
+public class Option {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, unique = true)
     @Getter
     @Setter
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "option_id", nullable = false)
+    @Column(name = "name", nullable = false)
     @Getter
     @Setter
-    private Option details;
+    private String name;
 
-    @Column(name = "aditional_price", nullable = false)
+    @Column(name = "description")
     @Getter
     @Setter
-    private Double aditionalPrice;
+    private String description;
 
-    @Column(name = "order_pos")
+    @Column(name = "is_active")
     @Getter
     @Setter
-    private Integer orderPos;
-
-    @Column(name = "product_option_id", nullable = false)
-    @Getter
-    @Setter
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Long productOptionId;
+    private Boolean isActive;
 
     @Column(name = "company_id", nullable = false)
     @Getter
     @Setter
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long companyId;
+
+    @OneToMany(mappedBy = "details", cascade = CascadeType.ALL)
+    @Getter
+    @Setter
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private List<ProductSubOption> productSubOptions;
 }

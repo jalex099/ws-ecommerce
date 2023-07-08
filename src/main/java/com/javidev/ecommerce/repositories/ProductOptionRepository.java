@@ -16,9 +16,9 @@ public interface ProductOptionRepository extends CrudRepository<ProductOption, L
     ArrayList<ProductOption> findByProductId(Long productId);
 
     @Modifying
-    @Query(value = "INSERT INTO products_options (name, description, order_pos, aditional_price, product_id, company_id) " +
+    @Query(value = "INSERT INTO products_options (name, description, order_pos, product_id, company_id) " +
             "VALUES (:name, :description, (SELECT MAX(po.order_pos) + 1 FROM products_options po WHERE company_id = :companyId)," +
-            " :aditionalPrice, :productId, :companyId) ", nativeQuery = true)
+            " :productId, :companyId) ", nativeQuery = true)
     @Transactional
-    void save(String name, String description, Double aditionalPrice, Long productId, Long companyId);
+    void save(String name, String description, Long productId, Long companyId);
 }

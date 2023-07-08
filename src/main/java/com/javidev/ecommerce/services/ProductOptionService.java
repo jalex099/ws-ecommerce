@@ -17,9 +17,9 @@ public class ProductOptionService {
         return productOptionRepository.findByProductId(productId);
     }
 
-    public void saveOption(String name, String description, Double aditionalPrice, Long productId) {
+    public void saveOption(String name, String description, Long productId) {
 
-        productOptionRepository.save(name, description, aditionalPrice, productId, Long.parseLong(Params.COMPANY_ID));
+        productOptionRepository.save(name, description, productId, Long.parseLong(Params.COMPANY_ID));
     }
 
 }

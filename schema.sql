@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS products_options (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    aditional_price DECIMAL(10,2) NOT NULL,
     order_pos INTEGER DEFAULT -1,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     product_id INTEGER NOT NULL,
@@ -47,14 +46,23 @@ CREATE TABLE IF NOT EXISTS products_options (
 -- CREAR TABLA SUB OPCIONES DE PRODUCTO
 CREATE TABLE IF NOT EXISTS products_sub_options (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
+    option_id INTEGER NOT NULL,
     aditional_price DECIMAL(10,2) NOT NULL,
     order_pos INTEGER DEFAULT -1,
-    is_active BOOLEAN NOT NULL DEFAULT TRUE,
     product_option_id INTEGER NOT NULL,
     company_id INTEGER NOT NULL,
+    FOREIGN KEY (option_id) REFERENCES options(id),
     FOREIGN KEY (product_option_id) REFERENCES products_options(id),
+    FOREIGN KEY (company_id) REFERENCES companies(id)
+);
+
+-- CREAR TABLA DE LISTADO DE OPCIONES
+CREATE TABLE IF NOT EXISTS options (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    company_id INTEGER NOT NULL,
     FOREIGN KEY (company_id) REFERENCES companies(id)
 );
 

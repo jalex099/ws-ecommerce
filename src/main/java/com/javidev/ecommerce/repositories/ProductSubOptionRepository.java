@@ -13,9 +13,9 @@ import org.springframework.stereotype.Repository;
 public interface ProductSubOptionRepository extends CrudRepository<ProductSubOption, Long> {
 
     @Modifying
-    @Query(value = "INSERT INTO products_sub_options (name, description, order_pos, aditional_price, product_option_id, company_id) " +
-            "VALUES (:name, :description, (SELECT MAX(pso.order_pos) + 1 FROM products_sub_options pso WHERE company_id = :companyId)," +
+    @Query(value = "INSERT INTO products_sub_options (option_id, order_pos, aditional_price, product_option_id, company_id) " +
+            "VALUES (:optionId, (SELECT MAX(pso.order_pos) + 1 FROM products_sub_options pso WHERE company_id = :companyId)," +
             " :aditionalPrice, :productOptionId, :companyId) ", nativeQuery = true)
     @Transactional
-    void save(String name, String description, Double aditionalPrice, Long productOptionId, Long companyId);
+    void save(Long optionId, Double aditionalPrice, Long productOptionId, Long companyId);
 }

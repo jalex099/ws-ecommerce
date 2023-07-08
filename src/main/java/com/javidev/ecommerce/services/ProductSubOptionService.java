@@ -14,7 +14,7 @@ public class ProductSubOptionService {
     @Autowired
     private ProductSubOptionRepository productSubOptionRepository;
 
-    public void saveOption(String name, String description, Double aditionalPrice, Long productOptionId) {
-        productSubOptionRepository.save(name, description, aditionalPrice, productOptionId, Long.parseLong(Params.COMPANY_ID));
+    public void saveOption(Long optionId, Double aditionalPrice, Long productOptionId) {
+        productSubOptionRepository.save(optionId, aditionalPrice, productOptionId, Long.parseLong(Params.COMPANY_ID));
     }
 }
