@@ -1,10 +1,11 @@
 package com.javidev.ecommerce.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.javidev.ecommerce.config.Params;
-import com.javidev.ecommerce.entities.Cart;
-import com.javidev.ecommerce.entities.CartDetail;
-import com.javidev.ecommerce.entities.CartDetailOption;
+import com.javidev.ecommerce.entities.*;
 import com.javidev.ecommerce.repositories.CartRepository;
+import com.javidev.ecommerce.utils.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,22 @@ public class CartService {
 
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ProductService productService;
 
-    public ArrayList<Cart> getCarts() {
-        return (ArrayList<Cart>) cartRepository.findAll();
+    public ArrayList<Map<String, Object>> getCartsByUserId(Long userId) {
+        ArrayList<Map<String, Object>> carts = new ArrayList<>();
+        ArrayList<Cart> cartsDB = (ArrayList<Cart>) cartRepository.findByUserId(userId);
+        for (Cart cart : cartsDB) {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            Map<String, Object> map = mapper.convertValue(cart, Map.class);
+            map.put("total", this.getTotal(cart));
+            carts.add(map);
+        }
+        return carts;
     }
 
     public Cart getCartById(Long id) {
@@ -43,6 +57,12 @@ public class CartService {
             cart.setDate(new Date());
             cart.setCompanyId(Long.parseLong(Params.COMPANY_ID));
         }
+        //* Si viene con un usuario, se busca en la base de datos
+        Long userId = Session.getAuthUserId();
+        User user = userService.getUserById(userId);
+        if(user != null) {
+            cart.setUserId(user);
+        }
         List<CartDetail> products = cart.getProducts();
         cart.clearProducts();
         for (CartDetail product : products) {
@@ -58,34 +78,52 @@ public class CartService {
     }
 
     public void deleteCart(Long id) {
-        cartRepository.deleteById(id);
+        if(this.isOwner(id))
+            cartRepository.deleteById(id);
     }
 
     public Cart toogleVisibility(Long id) {
+        if(!this.isOwner(id)) return null;
         Cart cart = cartRepository.findById(id).orElse(null);
-        if(cart != null) {
-            cart.setVisibility( cart.getVisibility().equals("PRIVATE") ? "PUBLIC" : "PRIVATE" );
-            return cartRepository.save(cart);
-        }
-        return null;
+        if(cart == null) return null;
+        cart.setVisibility( cart.getVisibility().equals("PRIVATE") ? "PUBLIC" : "PRIVATE" );
+        return cartRepository.save(cart);
     }
 
     public Cart activate(Long id) {
+        if(!this.isOwner(id)) return null;
         Cart cart = cartRepository.findById(id).orElse(null);
-        if(cart != null) {
-            cart.setStatus("ACT");
-            return cartRepository.save(cart);
-        }
-        return null;
+        if(cart == null) return null;
+        cart.setStatus("ACT");
+        return cartRepository.save(cart);
     }
 
     public Cart deactivate(Long id) {
+        if(!this.isOwner(id)) return null;
         Cart cart = cartRepository.findById(id).orElse(null);
-        if(cart != null) {
-            cart.setStatus("INA");
-            return cartRepository.save(cart);
+        if(cart == null) return null;
+        cart.setStatus("INA");
+        return cartRepository.save(cart);
+    }
+
+    //* Private method to check if the user is the owner of the cart
+    private Boolean isOwner(Long id) {
+        Long userId = Session.getAuthUserId();
+        Cart cart = cartRepository.findById(id).orElse(null);
+        if(cart == null) return false;
+        //* If the cart doesn't have a user, it's not private
+        if(cart.getUserId() == null) return true;
+        return cart.getUserId().equals(userId);
+    }
+
+    private double getTotal(Cart cart) {
+        double total = 0.0;
+        for (CartDetail detail : cart.getProducts()) {
+            Product product = productService.getProduct(detail.getProductId());
+            if(product == null) continue;
+            total += product.getPrice() * detail.getQuantity();
         }
-        return null;
+        return total;
     }
 }
 

@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,8 +52,7 @@ public class Cart {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-//    @Getter
-//    @Setter
+    @Setter
     private User userId;
 
     @Column(name = "company_id", nullable = false)
@@ -66,6 +66,10 @@ public class Cart {
     @Getter
     private List<CartDetail> products;
 
+    @Transient
+    @Setter
+    private double total;
+
     public void addProduct(CartDetail product) {
         products.add(product);
         product.setCartId(this);
@@ -75,4 +79,8 @@ public class Cart {
         products = new ArrayList<>();
     }
 
+
+    public Long getUserId() {
+        return (userId != null) ? userId.getId() : null;
+    }
 }

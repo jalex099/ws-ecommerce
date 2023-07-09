@@ -34,4 +34,17 @@ public class UserController {
             }}, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/auth")
+    public ResponseEntity<?> auth(@RequestBody HashMap<String, Object> data) {
+        try{
+            return new ResponseEntity<>(userService.auth(
+                    data.get("email").toString(),
+                    data.get("password").toString()), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new HashMap<String, String>() {{
+                put("error", "User not created");
+            }}, HttpStatus.BAD_REQUEST);
+        }
+    }
 }

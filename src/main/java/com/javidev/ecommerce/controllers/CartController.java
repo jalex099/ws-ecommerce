@@ -5,9 +5,11 @@ import com.javidev.ecommerce.entities.CartDetail;
 import com.javidev.ecommerce.entities.CartDetailOption;
 import com.javidev.ecommerce.entities.Product;
 import com.javidev.ecommerce.services.CartService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +25,19 @@ public class CartController {
 
     @GetMapping
     public ResponseEntity<?> getCarts() {
-        return new ResponseEntity<>(cartService.getCarts(), HttpStatus.OK);
+        try {
+            Long userId = Long.parseLong(SecurityContextHolder
+                    .getContext()
+                    .getAuthentication()
+                    .getPrincipal()
+                    .toString());
+            return new ResponseEntity<>(cartService.getCartsByUserId(userId), HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCartById(Long id) {
