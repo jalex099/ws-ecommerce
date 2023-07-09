@@ -106,6 +106,16 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
+    public Cart clone(String code){
+        Cart cartToClone = cartRepository.findByCode(code);
+        if(cartToClone == null) return null;
+        Long userId = Session.getAuthUserId();
+        if(cartToClone.getUserId().equals(userId)) return null;
+        User user = userService.getUserById(Session.getAuthUserId());
+        cartToClone.setUserId(user);
+        return cartRepository.save(cartToClone);
+    }
+
     //* Private method to check if the user is the owner of the cart
     private Boolean isOwner(Long id) {
         Long userId = Session.getAuthUserId();

@@ -89,4 +89,15 @@ public class CartController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/clone/{code}")
+    public ResponseEntity<?> cloneCart(@PathVariable String code){
+        try{
+            Cart isCloned = cartService.clone(code);
+            if(isCloned == null) throw new Exception("No se pudo clonar");
+            return new ResponseEntity<>(isCloned, HttpStatus.OK);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

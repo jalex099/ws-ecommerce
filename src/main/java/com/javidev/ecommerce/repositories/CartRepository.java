@@ -15,4 +15,7 @@ public interface CartRepository extends CrudRepository<Cart, Long> {
 
     @Query(value = "SELECT * FROM carts WHERE user_id = ?1", nativeQuery = true)
     ArrayList<Cart> findByUserId(Long userId);
+
+    @Query(value = "SELECT * FROM carts WHERE code = ?1 AND visibility='PUBLIC' LIMIT 1", nativeQuery = true)
+    Cart findByCode(String code);
 }
