@@ -29,10 +29,10 @@ public class CartDetail {
     @Setter
     private Cart cartId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @Column(name = "product_id", nullable = false)
+    @Getter
     @Setter
-    private Product productId;
+    private Long productId;
 
     @Column(name = "quantity", nullable = false)
     @Getter
@@ -56,10 +56,6 @@ public class CartDetail {
 
     public void clearOptions() {
         options = new ArrayList<>();
-    }
-
-    public Long getProductId() {
-        return productId.getId();
     }
     @Override
     public boolean equals(Object o) {

@@ -61,7 +61,7 @@ public class Cart {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long companyId;
 
-    @OneToMany(mappedBy = "cartId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cartId", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("order ASC")
     @Getter
     private List<CartDetail> products;
@@ -73,6 +73,11 @@ public class Cart {
     public void addProduct(CartDetail product) {
         products.add(product);
         product.setCartId(this);
+    }
+
+    public void removeProduct(CartDetail product) {
+        products.remove(product);
+        product.setCartId(null);
     }
 
     public void clearProducts() {

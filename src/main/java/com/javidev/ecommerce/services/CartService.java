@@ -23,13 +23,9 @@ public class CartService {
 
     public ArrayList<Map<String, Object>> getCartsByUserId(Long userId) {
         ArrayList<Map<String, Object>> carts = new ArrayList<>();
-        ArrayList<Cart> cartsDB = (ArrayList<Cart>) cartRepository.findByUserId(userId);
+        ArrayList<Cart> cartsDB = cartRepository.findByUserId(userId);
         for (Cart cart : cartsDB) {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-            Map<String, Object> map = mapper.convertValue(cart, Map.class);
-            map.put("total", this.getTotal(cart));
-            carts.add(map);
+            carts.add(this.completeCart(cart.getId()));
         }
         return carts;
     }
@@ -38,7 +34,7 @@ public class CartService {
         return cartRepository.findById(id).orElse(null);
     }
 
-    public Cart saveCart(Cart cart) {
+    public Map<String, Object> saveCart(Cart cart) {
         //* If it exists, get it and set the code and date and company from the DB
         if(cart.getId() != null) {
             Cart cartDB = cartRepository.findById(cart.getId()).orElse(null);
@@ -74,7 +70,8 @@ public class CartService {
             }
             cart.addProduct(product);
         }
-        return cartRepository.save(cart);
+        Cart savedCart = cartRepository.save(cart);
+        return this.completeCart(savedCart.getId());
     }
 
     public void deleteCart(Long id) {
@@ -134,6 +131,16 @@ public class CartService {
             total += product.getPrice() * detail.getQuantity();
         }
         return total;
+    }
+
+    private Map<String, Object> completeCart(Long cartId){
+        Cart cart = cartRepository.findById(cartId).orElse(null);
+        if(cart == null) return null;
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        Map<String, Object> map = mapper.convertValue(cart, Map.class);
+        map.put("total", this.getTotal(cart));
+        return map;
     }
 }
 
