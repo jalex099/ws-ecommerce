@@ -1,3 +1,17 @@
+-- CREAR TABLA DE PAISES
+CREATE TABLE IF NOT EXISTS countries (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+-- CREAR TABLA DE ESTADOS
+CREATE TABLE IF NOT EXISTS states (
+    id SERIAL PRIMARY KEY,
+    country_id INTEGER NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    FOREIGN KEY (country_id) REFERENCES countries(id)
+);
+
 -- CREAR TABLA DE COMPANIAS
 CREATE TABLE IF NOT EXISTS companies (
     id SERIAL PRIMARY KEY,
@@ -143,6 +157,50 @@ CREATE TABLE IF NOT EXISTS carts_details_options (
     product_option_id INTEGER NOT NULL,
     product_sub_option_id INTEGER NOT NULL,
     FOREIGN KEY (cart_detail_id) REFERENCES carts_details(id),
+    FOREIGN KEY (product_option_id) REFERENCES products_options(id),
+    FOREIGN KEY (product_sub_option_id) REFERENCES products_sub_options(id)
+);
+
+-- CREAR TABLA DE ORDENES
+CREATE TABLE IF NOT EXISTS orders (
+    id SERIAL PRIMARY KEY,
+    date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(3) NOT NULL,
+    user_id INTEGER,
+    first_name VARCHAR(60) NOT NULL,
+    last_name VARCHAR(60) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phone VARCHAR(15),
+    address VARCHAR(255) NOT NULL,
+    city VARCHAR(60) NOT NULL,
+    state VARCHAR(60) NOT NULL,
+    country VARCHAR(60) NOT NULL,
+    total DECIMAL(10,4) DEFAULT 0,
+    total_discount DECIMAL(10,4) DEFAULT 0,
+    total_tax DECIMAL(10,4) DEFAULT 0,
+    total_shipping DECIMAL(10,4) DEFAULT 0,
+    company_id INTEGER NOT NULL
+);
+
+-- CREAR TABLA DE DETALLE DE ORDENES
+CREATE TABLE IF NOT EXISTS orders_details (
+    id SERIAL PRIMARY KEY,
+    order_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    quantity INTEGER NOT NULL,
+    price DECIMAL(10,4) NOT NULL,
+    order_pos INTEGER,
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+-- CREAR TABLA DE DETALLE DE ORDENES OPCIONES
+CREATE TABLE IF NOT EXISTS orders_details_options (
+    id SERIAL PRIMARY KEY,
+    order_detail_id INTEGER NOT NULL,
+    product_option_id INTEGER NOT NULL,
+    product_sub_option_id INTEGER NOT NULL,
+    FOREIGN KEY (order_detail_id) REFERENCES orders_details(id),
     FOREIGN KEY (product_option_id) REFERENCES products_options(id),
     FOREIGN KEY (product_sub_option_id) REFERENCES products_sub_options(id)
 );

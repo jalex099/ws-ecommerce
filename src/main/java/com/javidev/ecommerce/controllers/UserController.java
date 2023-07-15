@@ -16,8 +16,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> getUsers() {
-        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+    public ResponseEntity<?> getOwnUser() {
+        return new ResponseEntity<>(userService.getOwnUser(), HttpStatus.OK);
     }
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody HashMap<String, Object> data) {

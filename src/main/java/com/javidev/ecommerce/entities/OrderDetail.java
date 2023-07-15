@@ -1,7 +1,5 @@
 package com.javidev.ecommerce.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,9 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "carts_details")
-public class CartDetail {
-
+@Table(name = "orders_details")
+public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
@@ -23,11 +20,11 @@ public class CartDetail {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Getter
     @Setter
-    private Cart cartId;
+    private Order orderId;
 
     @Column(name = "product_id", nullable = false)
     @Getter
@@ -39,24 +36,29 @@ public class CartDetail {
     @Setter
     private int quantity;
 
+    @Column(name = "price", nullable = false)
+    @Getter
+    @Setter
+    private double price;
+
     @Column(name = "order_pos")
     @Getter
     @Setter
     private int order;
 
-    @OneToMany(mappedBy = "cartDetailId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orderDetailId", cascade = CascadeType.ALL)
     @OrderBy("optionId ASC")
     @Getter
-    private List<CartDetailOption> options;
+    private List<OrderDetailOption> options;
 
-    public void addOption(CartDetailOption option) {
+    public void addOption(OrderDetailOption option) {
         options.add(option);
-        option.setCartDetailId(this);
+        option.setOrderDetailId(this);
     }
 
-    public void removeOption(CartDetailOption option) {
+    public void removeOption(OrderDetailOption option) {
         options.remove(option);
-        option.setCartDetailId(null);
+        option.setOrderDetailId(null);
     }
 
     public void clearOptions() {
@@ -73,5 +75,4 @@ public class CartDetail {
     public int hashCode() {
         return getClass().hashCode();
     }
-
 }

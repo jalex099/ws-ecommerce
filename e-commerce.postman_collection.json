@@ -1,0 +1,817 @@
+{
+	"info": {
+		"_postman_id": "8ba85806-008b-4d43-8fe2-d1139d6748f1",
+		"name": "e-commerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18543721"
+	},
+	"item": [
+		{
+			"name": "categories",
+			"item": [
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/categories",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"categories"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "is_active",
+									"value": "false",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Trajes\",\r\n    \"description\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/categories",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\":\"Vestidos\",\r\n    \"description\": \"Preciosos vestidos para tus hijas y lucir hermosa en los eventos especiales\",\r\n    \"isActive\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/categories",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/categories/:id",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "products",
+			"item": [
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/products",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "prod",
+									"disabled": true
+								},
+								{
+									"key": "is_active",
+									"value": "false",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Vaquita\",\r\n    \"description\" : \"Hermoso traje de vaquita para niña\",\r\n    \"price\": 14.00,\r\n    \"category_id\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/products",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "img",
+									"value": "asda",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\":2,\r\n    \"name\": \"Vaquita\",\r\n    \"description\" : \"Hermoso traje de vaquita para niña\",\r\n    \"price\": 14.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/products",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/products/:id",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "options",
+			"item": [
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/options",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"options"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Talla XXL\",\r\n    \"description\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/options",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"options"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "product-options",
+			"item": [
+				{
+					"name": "save",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Color\",\r\n    \"description\":\"Colores disponibles\",\r\n    \"productId\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/product-options",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"product-options"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "product-suboptions",
+			"item": [
+				{
+					"name": "save",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"optionId\": 4,\r\n    \"aditionalPrice\": 0,\r\n    \"productOptionId\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/product-suboptions",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"product-suboptions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "images",
+			"item": [
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/images",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"images"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "PRD",
+									"disabled": true
+								},
+								{
+									"key": "reference",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/javie/OneDrive/Documentos/Imagen de WhatsApp 2023-06-01 a las 22.47.55.jpg"
+								},
+								{
+									"key": "reference",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "PRD",
+									"type": "text"
+								},
+								{
+									"key": "size",
+									"value": "LG",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{SERVER}}/images",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"images"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/users",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"moralsxavi@gmail.com\",\r\n    \"password\": \"1234\",\r\n    \"firstName\": \"Javier Alexander\",\r\n    \"lastName\": \"Morales Melara\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/users",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "auth",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"javiermoralesmelara@gmail.com\",\r\n    \"password\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/users/auth",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"users",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "carts",
+			"item": [
+				{
+					"name": "get",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/carts",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"carts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByCode",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/carts/code/:code",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"carts",
+								"code",
+								":code"
+							],
+							"variable": [
+								{
+									"key": "code",
+									"value": "1698ab15-5dcf-4b0c-a27f-7e1e62df6a29"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 9,\r\n    \"status\": \"ACT\",\r\n    \"visibility\": \"PUBLIC\",\r\n    \"products\": [\r\n        {\r\n            \"productId\": 1,\r\n            \"quantity\": 2,\r\n            \"order\": 2,\r\n            \"options\": [\r\n                {\r\n                    \"optionId\": 1,\r\n                    \"selectedSubOption\": 5\r\n                },\r\n                {\r\n                    \"optionId\": 2,\r\n                    \"selectedSubOption\": 3\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"productId\": 2,\r\n            \"quantity\": 1,\r\n            \"order\": 1,\r\n            \"options\": [\r\n                {\r\n                    \"optionId\": 3,\r\n                    \"selectedSubOption\": 9\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/carts",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"carts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "toogleVisibility",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/carts/:id/toogle-visibility",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"carts",
+								":id",
+								"toogle-visibility"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activate",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/carts/:id/activate",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"carts",
+								":id",
+								"activate"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "19"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deactivate",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/carts/:id/deactivate",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"carts",
+								":id",
+								"deactivate"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "19"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}/carts/:id",
+							"host": [
+								"{{SERVER}}"
+							],
+							"path": [
+								"carts",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clone",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/carts/clone/:code",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"carts",
+								"clone",
+								":code"
+							],
+							"variable": [
+								{
+									"key": "code",
+									"value": "80920dd5-cc5f-4e91-bfb5-5b496e0c75dc"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "orders",
+			"item": [
+				{
+					"name": "save",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 3,\r\n    \"status\": \"PEN\",\r\n    \"firstName\": \"Javier Alexander\",\r\n    \"lastName\" : \"Morales Melara\",\r\n    \"email\": \"javiermoralesmelara@gmail.com\",\r\n    \"phone\": \"72709725\",\r\n    \"address\": \"Col. Ciudad Real Av, Fernando de Aragon Pje 9 Poligono C-11 Casa 7\",\r\n    \"city\": \"San Miguel\",\r\n    \"state\" : \"San Miguel\",\r\n    \"country\": \"El Salvador\",\r\n    \"products\": [\r\n        {\r\n            \"productId\": 1,\r\n            \"quantity\": 2,\r\n            \"price\": 20,\r\n            \"order\": 2,\r\n            \"options\": [\r\n                {\r\n                    \"optionId\": 1,\r\n                    \"selectedSubOption\": 5\r\n                },\r\n                {\r\n                    \"optionId\": 2,\r\n                    \"selectedSubOption\": 3\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"productId\": 2,\r\n            \"quantity\": 1,\r\n            \"price\": 21,\r\n            \"order\": 1,\r\n            \"options\": [\r\n                {\r\n                    \"optionId\": 3,\r\n                    \"selectedSubOption\": 9\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/orders",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "getData",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/getData",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"getData"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc1MjYxMjc2fQ.H61JtbEe9Z8iPBhvvk_r3fQqzasRLRPP7HY8e94V3Bx9qt8X0DlX1_4QcHcHX0S2K4Y0dmErt0SygdJNmHt-FA",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "HOST",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		},
+		{
+			"key": "SERVER",
+			"value": "https://ws-ecommerce-d69769ac2955.herokuapp.com/api",
+			"type": "string"
+		}
+	]
+}

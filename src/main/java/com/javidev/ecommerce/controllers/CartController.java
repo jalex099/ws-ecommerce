@@ -33,7 +33,6 @@ public class CartController {
                     .toString());
             return new ResponseEntity<>(cartService.getCartsByUserId(userId), HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
@@ -42,6 +41,11 @@ public class CartController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getCartById(Long id) {
         return new ResponseEntity<>(cartService.getCartById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/code/{code}")
+    public ResponseEntity<?> getCartByCode(@PathVariable String code) {
+        return new ResponseEntity<>(cartService.getCartByCode(code), HttpStatus.OK);
     }
 
     @PostMapping

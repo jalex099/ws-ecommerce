@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.javidev.ecommerce.config.Params;
 import com.javidev.ecommerce.entities.*;
 import com.javidev.ecommerce.repositories.CartRepository;
+import com.javidev.ecommerce.utils.Objects;
 import com.javidev.ecommerce.utils.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,44 +35,53 @@ public class CartService {
         return cartRepository.findById(id).orElse(null);
     }
 
+    public Cart getCartByCode(String code) {
+        return cartRepository.findByCode(code);
+    }
+
     public Map<String, Object> saveCart(Cart cart) {
-        //* If it exists, get it and set the code and date and company from the DB
-        if(cart.getId() != null) {
-            Cart cartDB = cartRepository.findById(cart.getId()).orElse(null);
-            if(cartDB == null) {
-                cart.setId(null);
+        try{
+            //* If it exists, get it and set the code and date and company from the DB
+            if(cart.getId() != null) {
+                Cart cartDB = cartRepository.findById(cart.getId()).orElse(null);
+                if(cartDB == null) {
+                    cart.setId(null);
+                }
+                else {
+                    cart.setCode(cartDB.getCode());
+                    cart.setDate(cartDB.getDate());
+                    cart.setCompanyId(cartDB.getCompanyId());
+                }
             }
-            else {
-                cart.setCode(cartDB.getCode());
-                cart.setDate(cartDB.getDate());
-                cart.setCompanyId(cartDB.getCompanyId());
+            //* If it doesn't exist, create it and set the code and date and company
+            if(cart.getId() == null ){
+                cart.setCode(UUID.randomUUID().toString());
+                cart.setDate(new Date());
+                cart.setCompanyId(Long.parseLong(Params.COMPANY_ID));
             }
-        }
-        //* If it doesn't exist, create it and set the code and date and company
-        if(cart.getId() == null ){
-            cart.setCode(UUID.randomUUID().toString());
-            cart.setDate(new Date());
-            cart.setCompanyId(Long.parseLong(Params.COMPANY_ID));
-        }
-        //* Si viene con un usuario, se busca en la base de datos
-        Long userId = Session.getAuthUserId();
-        User user = userService.getUserById(userId);
-        if(user != null) {
-            cart.setUserId(user);
-        }
-        List<CartDetail> products = cart.getProducts();
-        cart.clearProducts();
-        for (CartDetail product : products) {
-            List<CartDetailOption> options = product.getOptions();
-            product.clearOptions();
-            for (CartDetailOption option : options) {
-                option.setCartDetailId(product);
-                product.addOption(option);
+            //* Si viene con un usuario, se busca en la base de datos
+            Long userId = Session.getAuthUserId();
+            User user = userService.getUserById(userId);
+            if(user != null) {
+                cart.setUserId(user);
             }
-            cart.addProduct(product);
+            List<CartDetail> products = cart.getProducts();
+            cart.clearProducts();
+            for (CartDetail product : products) {
+                List<CartDetailOption> options = product.getOptions();
+                product.clearOptions();
+                for (CartDetailOption option : options) {
+                    option.setCartDetailId(product);
+                    product.addOption(option);
+                }
+                cart.addProduct(product);
+            }
+            Cart savedCart = cartRepository.save(cart);
+            return this.completeCart(savedCart.getId());
+        } catch (Exception e) {
+            return null;
         }
-        Cart savedCart = cartRepository.save(cart);
-        return this.completeCart(savedCart.getId());
+
     }
 
     public void deleteCart(Long id) {
@@ -123,6 +133,7 @@ public class CartService {
         return cart.getUserId().equals(userId);
     }
 
+    //* Get the total of the cart (price * quantity)
     private double getTotal(Cart cart) {
         double total = 0.0;
         for (CartDetail detail : cart.getProducts()) {
@@ -133,14 +144,34 @@ public class CartService {
         return total;
     }
 
+    //* Complete the cart with the validation and mapping of the cart and add the total
     private Map<String, Object> completeCart(Long cartId){
+        try {
+            Cart cart = cartRepository.findById(cartId).orElse(null);
+            if(cart == null) return null;
+            Cart validatedCart = this.validateCart(cart.getId());
+            if(validatedCart == null) return null;
+            Map<String, Object> map = Objects.mapper(validatedCart);
+            map.put("total", this.getTotal(validatedCart));
+            return map;
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
+    //* Validate every product in the cart if its active
+    private Cart validateCart (Long cartId) {
         Cart cart = cartRepository.findById(cartId).orElse(null);
         if(cart == null) return null;
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        Map<String, Object> map = mapper.convertValue(cart, Map.class);
-        map.put("total", this.getTotal(cart));
-        return map;
+        for(CartDetail detail : cart.getProducts()) {
+            Product product = productService.getProduct(detail.getProductId());
+            if(product == null || !product.getIsActive()) {
+                cart.removeProduct(detail);
+                cartRepository.save(cart);
+            }
+        }
+        return cartRepository.findById(cart.getId()).orElse(null);
     }
 }
 

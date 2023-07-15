@@ -1,6 +1,10 @@
 package com.javidev.ecommerce.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.lang.reflect.Field;
+import java.util.Map;
 
 public class Objects {
     public static boolean isNull(Object object) {
@@ -30,5 +34,13 @@ public class Objects {
             e.printStackTrace();
         }
         return (T) mergedObject;
+    }
+
+    //* Parse any object to Map<String, Object>
+    public static Map<String, Object> mapper(Object object) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        return mapper.convertValue(object, Map.class);
     }
 }
