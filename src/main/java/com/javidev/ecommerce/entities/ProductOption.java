@@ -7,12 +7,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "products_options")
-@Where(clause = "company_id = " + Params.COMPANY_ID + " AND is_active = true")
+@Where(clause = "is_active = true")
 public class ProductOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,28 +38,36 @@ public class ProductOption {
     @Setter
     private Integer orderPos;
 
-    @Column(name = "is_active")
+    @Column(name = "is_active", columnDefinition = "boolean default true")
     @Getter
     @Setter
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Boolean isActive;
 
-    @Column(name = "product_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Getter
     @Setter
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Long productId;
-
-    @Column(name = "company_id", nullable = false)
-    @Getter
-    @Setter
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Long companyId;
+    private Product productId;
 
 
-    @OneToMany(mappedBy = "productOptionId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "productOptionId", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("order_pos ASC")
     @Getter
     @Setter
-    private Set<ProductSubOption> subOptions = new HashSet<>();
+    private List<ProductSubOption> subOptions;
+
+    public void clearSubOptions() {
+        subOptions = new ArrayList<>();
+    }
+
+    public void addSubOption(ProductSubOption subOption) {
+        subOptions.add(subOption);
+        subOption.setProductOptionId(this);
+    }
+
+    public void removeSubOption(ProductSubOption subOption) {
+        subOptions.remove(subOption);
+        subOption.setProductOptionId(null);
+    }
 }

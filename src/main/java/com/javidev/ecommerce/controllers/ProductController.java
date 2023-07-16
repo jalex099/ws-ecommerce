@@ -48,22 +48,16 @@ public class ProductController {
         }
     }
 
-    @PostMapping()
-    public ResponseEntity<?> saveProduct(@RequestBody HashMap<String, Object> data) {
+    @PostMapping
+    public ResponseEntity<?> saveProduct(@RequestBody Product product) {
         try {
-            productService.saveProduct(
-                    data.get("name").toString(),
-                    data.get("description").toString(),
-                    Double.parseDouble(data.get("price").toString()),
-                    Long.parseLong(data.get("category_id").toString())
-            );
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(productService.saveProduct(product), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<?> updateProduct(@RequestBody Product product) {
         try {
             Product updated =  productService.updateProduct(product);

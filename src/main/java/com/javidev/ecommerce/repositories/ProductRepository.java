@@ -16,10 +16,4 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
             "AND (:isActive IS NULL OR p.isActive = :isActive)")
     ArrayList<Product> findByFilters(String name, Long category, Boolean isActive);
 
-
-    @Modifying
-    @Query(value = "INSERT INTO products (name, description, order_pos, price, category_id, company_id) " +
-            "VALUES (:name, :description, (SELECT MAX(p.order_pos) + 1 FROM products p WHERE company_id = :companyId), :price, :categoryId, :companyId) ", nativeQuery = true)
-    @Transactional
-    void save(String name, String description, Double price, Long categoryId, Long companyId);
 }

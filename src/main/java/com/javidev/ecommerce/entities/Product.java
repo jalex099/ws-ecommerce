@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,11 +55,29 @@ public class Product {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long categoryId;
 
-    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL)
+    @Column(name = "company_id", nullable = false)
+    @Getter
+    @Setter
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long companyId;
+
+    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("order_pos ASC")
     @Getter
     @Setter
     private List<ProductOption> options;
 
+    public void addOption(ProductOption option) {
+        options.add(option);
+        option.setProductId(this);
+    }
+
+    public void removeOption(ProductOption option) {
+        options.remove(option);
+        option.setProductId(null);
+    }
+    public void clearOptions() {
+        options = new ArrayList<>();
+    }
 
 }

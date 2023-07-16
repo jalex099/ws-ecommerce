@@ -34,15 +34,4 @@ public class OrderDetailOption {
     @Setter
     private Long selectedSubOption;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CartDetailOption )) return false;
-        return id != null && id.equals(((CartDetailOption) o).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

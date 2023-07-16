@@ -9,7 +9,6 @@ import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "products_sub_options")
-@Where(clause = "company_id = " + Params.COMPANY_ID)
 public class ProductSubOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +17,15 @@ public class ProductSubOption {
     @Setter
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "option_id", nullable = false)
+    @ManyToOne(targetEntity = Option.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "option_id", insertable = false, updatable = false)
     @Getter
     @Setter
     private Option details;
+
+    @Column(name = "option_id", nullable = false)
+    @Setter
+    private Long optionId;
 
     @Column(name = "aditional_price", nullable = false)
     @Getter
@@ -34,15 +37,11 @@ public class ProductSubOption {
     @Setter
     private Integer orderPos;
 
-    @Column(name = "product_option_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "product_option_id", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Getter
     @Setter
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Long productOptionId;
+    private ProductOption productOptionId;
 
-    @Column(name = "company_id", nullable = false)
-    @Getter
-    @Setter
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Long companyId;
 }
