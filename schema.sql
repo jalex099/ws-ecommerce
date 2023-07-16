@@ -179,6 +179,10 @@ CREATE TABLE IF NOT EXISTS orders (
     total_discount DECIMAL(10,4) DEFAULT 0,
     total_tax DECIMAL(10,4) DEFAULT 0,
     total_shipping DECIMAL(10,4) DEFAULT 0,
+    payment_method VARCHAR(3) NOT NULL,
+    payment_status VARCHAR(3) DEFAULT 'PEN',
+    card_number VARCHAR(4),
+    pos_id VARCHAR(50),
     company_id INTEGER NOT NULL
 );
 

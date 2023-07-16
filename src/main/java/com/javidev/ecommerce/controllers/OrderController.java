@@ -23,4 +23,23 @@ public class OrderController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/checkout/{id}")
+    public ResponseEntity<?> checkout(@RequestBody Order order, @PathVariable Long id) {
+        try{
+            return new ResponseEntity<>(orderService.checkout(id, order), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    //* Soft delete
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
+        try{
+            return new ResponseEntity<>(orderService.deleteOrder(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

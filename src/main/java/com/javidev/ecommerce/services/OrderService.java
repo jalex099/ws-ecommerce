@@ -12,6 +12,7 @@ import com.javidev.ecommerce.utils.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,8 @@ public class OrderService {
 
     @Autowired
     private UserService userService;
+
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
     public Map<String, Object> saveOrder(Order order) {
         try{
@@ -63,9 +66,9 @@ public class OrderService {
                 order.addProduct(product);
             }
             order.setTotal(this.getTotal(products));
-            order.setTotalDiscount(this.getTotalDiscount(products));
-            order.setTotalTax(this.getTotalTax(products));
-            order.setTotalShipping(this.getTotalShipping(products));
+            order.setTotalDiscount(this.getTotalDiscount(order.getTotal()));
+            order.setTotalTax(this.getTotalTax(order.getTotal()));
+            order.setTotalShipping(this.getTotalShipping(order.getTotal(), order.getTotalDiscount(), order.getTotalTax()));
             Order savedOrder = orderRepository.save(order);
             return Objects.mapper(savedOrder);
         } catch (Exception e) {
@@ -73,35 +76,44 @@ public class OrderService {
         }
     }
 
+    public Order deleteOrder(Long id) {
+        Order order = orderRepository.findById(id).orElse(null);
+        if(order == null) throw new RuntimeException("Order not found");
+        order.setStatus("DEL");
+        orderRepository.save(order);
+        return order;
+    }
+
+    public Order checkout(Long id, Order order){
+        Order orderDB = orderRepository.findById(id).orElse(null);
+        if(orderDB == null) throw new RuntimeException("Order not found");
+        Order mergedOrder = Objects.merge(order, orderDB);
+        mergedOrder.setStatus("COM");
+        mergedOrder.setTotal(this.getTotal(mergedOrder.getProducts()));
+        mergedOrder.setTotalDiscount(this.getTotalDiscount(mergedOrder.getTotal()));
+        mergedOrder.setTotalTax(this.getTotalTax(mergedOrder.getTotal()));
+        mergedOrder.setTotalShipping(this.getTotalShipping(mergedOrder.getTotal(), mergedOrder.getTotalDiscount(), mergedOrder.getTotalTax()));
+        orderRepository.save(mergedOrder);
+        return mergedOrder;
+    }
+
     private double getTotal(List<OrderDetail> products) {
         double total = 0;
         for(OrderDetail product : products){
             total += product.getPrice() * product.getQuantity();
         }
-        return total;
+        return Double.parseDouble(df.format(total));
     }
 
-    private double getTotalDiscount(List<OrderDetail> products) {
-        double totalDiscount = 0;
-        for(OrderDetail product : products){
-            totalDiscount += 0;
-        }
-        return totalDiscount;
+    private double getTotalDiscount(double total) {
+        return 0.00;
     }
 
-    private double getTotalTax(List<OrderDetail> products) {
-        double totalTax = 0;
-        for(OrderDetail product : products){
-            totalTax += 0;
-        }
-        return totalTax;
+    private double getTotalTax(double total) {
+        return Double.parseDouble(df.format(total / (1 + Double.parseDouble(Params.TAX))));
     }
 
-    private double getTotalShipping(List<OrderDetail> products) {
-        double totalShipping = 0;
-        for(OrderDetail product : products){
-            totalShipping += product.getPrice() * product.getQuantity();
-        }
-        return totalShipping;
+    private double getTotalShipping(double total, double discount, double tax) {
+        return Double.parseDouble(df.format(total - (discount + tax)));
     }
 }

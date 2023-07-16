@@ -97,6 +97,26 @@ public class Order {
     @Setter
     private double totalShipping;
 
+    @Column(name= "payment_method", nullable = false)
+    @Getter
+    @Setter
+    private String paymentMethod;
+
+    @Column(name= "payment_status", nullable = false)
+    @Getter
+    @Setter
+    private String paymentStatus = "PEN";
+
+    @Column(name= "card_number")
+    @Getter
+    @Setter
+    private String cardNumber;
+
+    @Column(name= "pos_id")
+    @Getter
+    @Setter
+    private String posId;
+
     @Column(name = "company_id", nullable = false)
     @Getter
     @Setter
