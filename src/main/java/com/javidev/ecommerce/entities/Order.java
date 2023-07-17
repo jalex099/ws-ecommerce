@@ -22,10 +22,15 @@ public class Order {
     @Setter
     private Long id;
 
-    @Column(name = "date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "date_created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Getter
     @Setter
-    private Date date;
+    private Date dateCreated;
+
+    @Column(name = "date_confirmed")
+    @Getter
+    @Setter
+    private Date dateConfirmed;
 
     @Column(name = "status", nullable = false)
     @Getter
@@ -127,6 +132,11 @@ public class Order {
     @OrderBy("order ASC")
     @Getter
     private List<OrderDetail> products;
+
+    @Transient
+    @Getter
+    @Setter
+    private String cartCode;
 
     public void addProduct(OrderDetail product) {
         products.add(product);

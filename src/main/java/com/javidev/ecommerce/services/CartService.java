@@ -123,6 +123,14 @@ public class CartService {
         return cartRepository.save(cartToClone);
     }
 
+    public void setCartAsPaid(String code){
+        Cart cart = cartRepository.findByCode(code);
+        if(cart == null) return;
+        cart.setStatus("PAI");
+        cartRepository.save(cart);
+    }
+
+
     //* Private method to check if the user is the owner of the cart
     private Boolean isOwner(Long id) {
         Long userId = Session.getAuthUserId();
@@ -157,7 +165,6 @@ public class CartService {
         } catch (Exception e) {
             return null;
         }
-
     }
 
     //* Validate every product in the cart if its active

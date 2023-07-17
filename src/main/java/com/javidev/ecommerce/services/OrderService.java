@@ -1,11 +1,9 @@
 package com.javidev.ecommerce.services;
 
 import com.javidev.ecommerce.config.Params;
-import com.javidev.ecommerce.entities.Order;
-import com.javidev.ecommerce.entities.OrderDetail;
-import com.javidev.ecommerce.entities.OrderDetailOption;
-import com.javidev.ecommerce.entities.User;
+import com.javidev.ecommerce.entities.*;
 import com.javidev.ecommerce.repositories.OrderRepository;
+import com.javidev.ecommerce.repositories.ProductSubOptionRepository;
 import com.javidev.ecommerce.repositories.UserRepository;
 import com.javidev.ecommerce.utils.Objects;
 import com.javidev.ecommerce.utils.Session;
@@ -27,6 +25,12 @@ public class OrderService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CartService cartService;
+
+    @Autowired
+    private ProductSubOptionRepository productSubOptionRepository;
+
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
     public Map<String, Object> saveOrder(Order order) {
@@ -38,14 +42,14 @@ public class OrderService {
                     order.setId(null);
                 }
                 else{
-                    order.setDate(orderDB.getDate());
+                    order.setDateCreated(orderDB.getDateCreated());
                     order.setStatus(orderDB.getStatus());
                     order.setCompanyId(orderDB.getCompanyId());
                 }
             }
             //* If it doesn't exist, create it and set the date and status
             if(order.getId() == null){
-                order.setDate(new Date());
+                order.setDateCreated(new Date());
                 order.setStatus("PEN");
                 order.setCompanyId(Long.parseLong(Params.COMPANY_ID));
             }
@@ -87,13 +91,18 @@ public class OrderService {
     public Order checkout(Long id, Order order){
         Order orderDB = orderRepository.findById(id).orElse(null);
         if(orderDB == null) throw new RuntimeException("Order not found");
+        if(!orderDB.getStatus().equals("PEN")) throw new RuntimeException("Order is not pending");
         Order mergedOrder = Objects.merge(order, orderDB);
-        mergedOrder.setStatus("COM");
+        mergedOrder.setStatus("CON");
+        mergedOrder.setDateConfirmed(new Date());
         mergedOrder.setTotal(this.getTotal(mergedOrder.getProducts()));
         mergedOrder.setTotalDiscount(this.getTotalDiscount(mergedOrder.getTotal()));
         mergedOrder.setTotalTax(this.getTotalTax(mergedOrder.getTotal()));
         mergedOrder.setTotalShipping(this.getTotalShipping(mergedOrder.getTotal(), mergedOrder.getTotalDiscount(), mergedOrder.getTotalTax()));
         orderRepository.save(mergedOrder);
+        if(order.getCartCode() != null){
+            cartService.setCartAsPaid(order.getCartCode());
+        }
         return mergedOrder;
     }
 
@@ -101,6 +110,15 @@ public class OrderService {
         double total = 0;
         for(OrderDetail product : products){
             total += product.getPrice() * product.getQuantity();
+            List<OrderDetailOption> options = product.getOptions();
+            for(OrderDetailOption option : options){
+                //* Get the selected sub-option and add its aditional price to the total
+                ProductSubOption subOptionSelected = option.getDetailSubOptionSelected();
+                if(subOptionSelected == null) subOptionSelected = productSubOptionRepository.findById(option.getSelectedSubOption()).orElse(null);
+                if(subOptionSelected != null){
+                    total += subOptionSelected.getAditionalPrice();
+                }
+            }
         }
         return Double.parseDouble(df.format(total));
     }

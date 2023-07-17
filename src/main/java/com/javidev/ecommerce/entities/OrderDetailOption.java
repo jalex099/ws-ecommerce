@@ -34,4 +34,10 @@ public class OrderDetailOption {
     @Setter
     private Long selectedSubOption;
 
+    @ManyToOne(targetEntity = ProductSubOption.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_sub_option_id", insertable = false, updatable = false)
+    @Getter
+    @Setter
+    private ProductSubOption detailSubOptionSelected;
+
 }
