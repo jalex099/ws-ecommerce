@@ -47,4 +47,16 @@ public class UserController {
             }}, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/auth/google")
+    public ResponseEntity<?> authGoogle(@RequestParam String token) {
+        try{
+            System.out.println("token: " + token);
+            return new ResponseEntity<>(token, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new HashMap<String, String>() {{
+                put("error", "User not created");
+            }}, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
