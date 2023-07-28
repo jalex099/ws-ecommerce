@@ -40,16 +40,14 @@ import java.util.HashMap;
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationFilter extends OncePerRequestFilter {
-    @Value("${spring.security.oauth2.client.registration.google.client-id}")
-    private String GOOGLE_CLIENT_ID;
-
-    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-    private String GOOGLE_CLIENT_SECRET;
 
     private final RequestMatcher uriMatcher =
             new AntPathRequestMatcher("/api/users/auth", HttpMethod.POST.name());
 
     private final ObjectMapper mapper;
+
+    @Autowired
+    private OAuth2Services oAuth2Services;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -70,21 +68,14 @@ public class OAuth2AuthenticationFilter extends OncePerRequestFilter {
 //            AuthorizationCodeTokenRequest tokenRequest = flow.newTokenRequest(authCredentials.getCode());
 //            TokenResponse tokenResponse = tokenRequest.execute();
 //            System.out.println(tokenResponse);
-            GoogleAuthorizationCodeTokenRequest tokenRequest = new GoogleAuthorizationCodeTokenRequest(
-                    httpTransport,
-                    jsonFactory,
-                    GOOGLE_CLIENT_ID,
-                    GOOGLE_CLIENT_SECRET,
-                    authCredentials.getCode(),
-                    "postmessage"
-            );
-            GoogleTokenResponse tokenResponse = tokenRequest.execute();
-            if(tokenResponse == null) throw new RuntimeException("Invalid code");
-            //* Write in the response the token
+            HashMap<String, Object> tokenResponse = oAuth2Services.getAccessToken(authCredentials.getCode());
             System.out.println(tokenResponse);
+            if(tokenResponse == null) throw new IOException("Invalid token");
+            //* Write in the response the token
             HashMap<String, Object> params = new HashMap<>();
-            params.put("token", tokenResponse.getIdToken());
-            params.put("refreshToken", tokenResponse.getAccessToken());
+            params.put("id_token", tokenResponse.get("id_token"));
+            params.put("access_token", tokenResponse.get("access_token"));
+            System.out.println(oAuth2Services.getUserInfo(tokenResponse.get("id_token").toString()));
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             mapper.writeValue(response.getWriter(), params);
