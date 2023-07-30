@@ -44,15 +44,15 @@ public class WebSecurityConfig {
     private final OAuth2AuthenticationFilter oAuth2AuthenticationFilter;
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter();
-        jwtAuthenticationFilter.setAuthenticationManager(authManager);
-        jwtAuthenticationFilter.setFilterProcessesUrl("/api/users/auth");
+//        JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter();
+//        jwtAuthenticationFilter.setAuthenticationManager(authManager);
+//        jwtAuthenticationFilter.setFilterProcessesUrl("/api/users/auth");
 
         return http
                 .authorizeHttpRequests()
-                .requestMatchers("/api/getData", "/docs/swagger-ui", "/api/users/auth/google")
+                .requestMatchers("/api/getData", "/docs/swagger-ui")
                 .permitAll()
                 .and()
                 .cors()
@@ -68,9 +68,9 @@ public class WebSecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-//                .addFilter(jwtAuthorizationFilter)
+//                .addFilter(jwtAuthenticationFilter)
                 .addFilterAt(oAuth2AuthenticationFilter, BasicAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthorizationFilter, BasicAuthenticationFilter.class)
                 .build();
     }
 

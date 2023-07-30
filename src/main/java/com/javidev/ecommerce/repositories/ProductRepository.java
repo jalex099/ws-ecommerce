@@ -13,7 +13,8 @@ import java.util.ArrayList;
 public interface ProductRepository extends CrudRepository<Product, Long> {
     @Query("FROM Product p WHERE (:name IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
             "AND (:category IS NULL OR p.categoryId = :category) " +
-            "AND (:isActive IS NULL OR p.isActive = :isActive)")
+            "AND (:isActive IS NULL OR p.isActive = :isActive)" +
+            "ORDER BY p.id ASC")
     ArrayList<Product> findByFilters(String name, Long category, Boolean isActive);
 
 }

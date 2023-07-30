@@ -42,28 +42,29 @@ public class Token {
 
     public static UsernamePasswordAuthenticationToken getAuthentication (String token){
         try{
-            HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-            JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(httpTransport, jsonFactory)
-                .setAudience(Collections.singletonList(GOOGLE_CLIENT_ID))
-                .build();
-            GoogleIdToken idToken = verifier.verify(token);
-            if( idToken == null) throw new RuntimeException("Invalid token");
-            GoogleIdToken.Payload payload = idToken.getPayload();
-            String userId = payload.getSubject();
-            return new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());
-//            Claims claims = Jwts.parserBuilder()
-//                    .setSigningKey(Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes()))
-//                    .build()
-//                    .parseClaimsJws(token)
-//                    .getBody();
-//            String idUser = claims.getSubject();
-//            return new UsernamePasswordAuthenticationToken(idUser, null, Collections.emptyList());
+//            HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+//            JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+//            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(httpTransport, jsonFactory)
+//                .setAudience(Collections.singletonList(GOOGLE_CLIENT_ID))
+//                .build();
+//            GoogleIdToken idToken = verifier.verify(token);
+//            if( idToken == null) throw new RuntimeException("Invalid token");
+//            GoogleIdToken.Payload payload = idToken.getPayload();
+//            String userId = payload.getSubject();
+//            return new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes()))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            String idUser = claims.getSubject();
+            return new UsernamePasswordAuthenticationToken(idUser, null, Collections.emptyList());
         }
         catch (JwtException e){
             return null;
-        } catch (GeneralSecurityException | IOException e) {
-            throw new RuntimeException(e);
         }
+//        catch (GeneralSecurityException | IOException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 }

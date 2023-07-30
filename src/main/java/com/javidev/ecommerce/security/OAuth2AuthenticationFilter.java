@@ -75,7 +75,8 @@ public class OAuth2AuthenticationFilter extends OncePerRequestFilter {
             HashMap<String, Object> params = new HashMap<>();
             params.put("id_token", tokenResponse.get("id_token"));
             params.put("access_token", tokenResponse.get("access_token"));
-            System.out.println(oAuth2Services.getUserInfo(tokenResponse.get("id_token").toString()));
+            HashMap<String, Object> userInfo = oAuth2Services.getUserInfo(tokenResponse.get("id_token").toString());
+            params.put("profile_picture", userInfo.get("picture"));
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             mapper.writeValue(response.getWriter(), params);
