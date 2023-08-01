@@ -10,4 +10,12 @@ public class Session {
                 .getPrincipal()
                 .toString());
     }
+
+    public static String getAuthUserGoogleId() {
+        return SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal()
+                .toString();
+    }
 }

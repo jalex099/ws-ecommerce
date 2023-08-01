@@ -38,22 +38,22 @@ public class User {
     @Setter
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "picture")
     @Getter
     @Setter
-    private String password;
+    private String picture;
 
-    @Column(name = "platform")
-    @Getter
-    @Setter
-    private String platform;
-
-    @Column(name = "is_active", nullable = false)
+    @Column(name = "is_active", columnDefinition = "boolean default true")
     @Getter
     @Setter
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Boolean isActive;
+    private Boolean isActive = true;
 
+    @Column(name = "company_id", nullable = false)
+    @Getter
+    @Setter
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long companyId;
 
     @OneToMany(mappedBy = "userId")
     private List<Cart> carts;
